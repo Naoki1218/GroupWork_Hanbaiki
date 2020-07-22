@@ -32,13 +32,18 @@ class VendingMachine
   end
 
   def select_drink(drink_name)
-      drinks.find do |drink|
+      @drinks.find do |drink|
       drink[:drink].name == drink_name
     end
   end
 
   def add_drink(name, price, count)
+    if @drinks.none? { |drink| drink[:drink].name == name}
     @drinks << {drink: Drink.new(name, price), count: count}
+  else
+    drink = select_drink(name)
+    drink[:count] += count
+    end
   end
 
   def purchase(drink_name)
