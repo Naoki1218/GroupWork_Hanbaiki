@@ -32,7 +32,7 @@ class VendingMachine
   end
 
   def select_drink(drink_name)
-      @drinks.find do |drink|
+    @drinks.find do |drink|
       drink[:drink].name == drink_name
     end
   end
