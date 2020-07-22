@@ -18,35 +18,14 @@ class VendingMachine
     @sale_amount = 0
   end
 
-  def current_slot_money
-    puts "現在の投入金額は#{@slot_money}円です！"
-  end
-
-  def current_sale_amount
-    puts "現在の売上高は#{@slot_amount}円です！"
-  end
-
   def slot_money(money)
     return false unless MONEY.include?(money)
     @slot_money += money
     puts "#{money}円が投入されました！"
   end
 
-  def select_drink(drink_name)
-    @drinks.find do |drink|
-      drink[:drink].name == drink_name
-    end
-  end
-
-  def add_drink(name, price, count)
-    if @drinks.none? { |drink| drink[:drink].name == name}
-      @drinks << {drink: Drink.new(name, price), count: count}
-      puts "#{name}(#{price}円)が#{count}本追加されました！"
-    else
-      drink = select_drink(name)
-      drink[:count] += count
-      puts "#{name}が#{count}本追加されました！"
-    end
+  def current_slot_money
+    puts "現在の投入金額は#{@slot_money}円です！"
   end
 
   def purchase(drink_name)
@@ -65,7 +44,18 @@ class VendingMachine
 
   def purchasable_drinks_list
     purchasable_drinks.map do |drink|
-     drink[:drink].name
+      drink[:drink].name
+    end
+  end
+
+  def return_money
+    puts @slot_money
+    @slot_money = 0
+  end
+
+  def select_drink(drink_name)
+    @drinks.find do |drink|
+      drink[:drink].name == drink_name
     end
   end
 
@@ -74,9 +64,20 @@ class VendingMachine
       drink[:drink].price <= @slot_money && drink[:count] > 0
     end
   end
-  
-  def return_money
-    puts @slot_money
-    @slot_money = 0
+
+  def add_drink(name, price, count)
+    if @drinks.none? { |drink| drink[:drink].name == name}
+      @drinks << {drink: Drink.new(name, price), count: count}
+      puts "#{name}(#{price}円)が#{count}本追加されました！"
+    else
+      drink = select_drink(name)
+      drink[:count] += count
+      puts "#{name}が#{count}本追加されました！"
+    end
   end
+
+  def current_sale_amount
+    puts "現在の売上高は#{@sale_amount}円です！"
+  end
+
 end
